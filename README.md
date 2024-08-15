@@ -26,7 +26,7 @@ Con esto, la aplicación estará lista para ejecutar:
 yarn dev
 ```
 
-El comando anterior ejecuta la aplicación en modo de desarrollo. Puedes abrir el navegador web en [http://localhost:4173/](http://localhost:4173/) para ver el funcionamiento.
+El comando anterior ejecuta la aplicación en modo de desarrollo. Puedes abrir el navegador web en [http://localhost:5173/](http://localhost:5173/) para ver el funcionamiento.
 
 ## Lo básico de Vite
 
