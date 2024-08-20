@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon, TextField, Box } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Weather from './components/Weather';
+import fetchWeather from './api/weatherApi';
 
 function Home() {
   return (
-    <Card sx={{ margin: 2, maxWidth: 600, mx: "auto" }}> {/* Estiliza la tarjeta según necesites */}
+    <Card sx={{ margin: 2, maxWidth: 600, mx: "auto" }}>
       <CardContent>
         <Typography variant="h5" component="div" gutterBottom>
           Información del Clima
@@ -21,7 +23,51 @@ function Home() {
 }
 
 function Search() {
-  return <Typography variant="h6">Buscar</Typography>;
+  const [inputValue, setInputValue] = useState("");
+  const [city, setCity] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const temps = await fetchWeather(city);
+      console.log('Temperaturas:', temps);
+    }
+    if (city) {
+      fetchData();
+    }
+  }, [city]);
+
+  return (
+    <>
+
+      <Box sx={{ margin: 2, maxWidth: 600, mx: "auto" }} style={{ backgroundColor: "white" }}>
+        <TextField
+          label="Buscar ciudad"
+          variant="outlined"
+          fullWidth
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={() => setCity(inputValue)}
+          startIcon={<SearchIcon />}
+        >
+          Buscar
+        </Button>
+      </Box>
+    </>
+  );
+}
+
+function HelloWorld() {
+  return (
+    <Typography variant="h3" component="div">
+      Hello, World!
+    </Typography>
+  );
 }
 
 function App() {
@@ -54,7 +100,7 @@ function App() {
         open={drawerOpen}
         onClose={toggleDrawer}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true,
         }}
       >
         <List>
@@ -70,12 +116,19 @@ function App() {
             </ListItemIcon>
             <ListItemText primary="Buscar" />
           </ListItem>
+          <ListItem button component={Link} to="/hello" onClick={toggleDrawer}>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Hola mundo" />
+          </ListItem>
         </List>
       </Drawer>
-      <Toolbar /> {/* This empty toolbar is necessary to offset the content below the AppBar */}
+      <Toolbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/hello" element={<HelloWorld />} />
       </Routes>
     </>
   );
